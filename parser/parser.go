@@ -4,26 +4,21 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
+
+	"github.com/MichalPitr/go-http-server/types"
 )
 
-type HttpRequest struct {
-	Method   string
-	Path     string
-	Protocol string
-}
-
 // TODO: Improve parsing
-func Parse(request string) (HttpRequest, error) {
+func Parse(request string) (types.HttpRequest, error) {
 	req := strings.Split(request, "\r\n")
 	if len(req) < 1 {
-		return HttpRequest{}, fmt.Errorf("Malformed request")
+		return types.HttpRequest{}, fmt.Errorf("Malformed request")
 	}
 	reqHeader := strings.Split(req[0], " ")
 
-	return HttpRequest{
+	return types.HttpRequest{
 		Method:   reqHeader[0],
 		Path:     filepath.Clean(reqHeader[1]),
 		Protocol: reqHeader[2],
 	}, nil
-
 }
